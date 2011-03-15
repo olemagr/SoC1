@@ -5,19 +5,25 @@ Adapter::Adapter (sc_module_name name) : sc_module (name)
 {
   SC_HAS_PROCESS (Adapter);
   SC_THREAD(main);
+  SC_THREAD(pushlisten);
   listening = false;
   button_id = 0;
   status = 0;
 }
 
+void Adapter::pushlisten() {
+  while(true) {
+    wait(push_event);
+    packet.button_id = button_id;
+    packet.button_pushed = 1;
+    send (&packet);
+    listening = true;
+    listen_event.notify();
+  }
+}
 void Adapter::push (int b_id) {
-  // Write to memory
   button_id = b_id;
-  packet.button_id = button_id;
-  packet.button_pushed = 1;
-  send(&packet);
-  listening = true; // Do this last
-  listen_event.notify();
+  push_event.notify();
 }
 
 void Adapter::send(data_packet_t* packet) {

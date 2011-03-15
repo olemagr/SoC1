@@ -13,10 +13,12 @@ class Adapter : public control_if, public sc_module
   
   Adapter (sc_module_name);
   virtual void main(void);
+  void pushlisten(void);
   virtual void push (int);  
   void send(data_packet_t*);
  private:
   sc_event listen_event;
+  sc_event push_event;
   bool listening;
   int button_id, packet_address;
   int status, temp_read, control_word;
