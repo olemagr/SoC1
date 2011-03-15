@@ -14,7 +14,7 @@ class Adapter : public control_if, public sc_module
   Adapter (sc_module_name);
   virtual void main(void);
   virtual void push (int);  
-  void send(data_packet_t);
+  void send(data_packet_t*);
  private:
   sc_event listen_event;
   bool listening;

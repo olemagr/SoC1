@@ -15,19 +15,19 @@ void Adapter::push (int b_id) {
   button_id = b_id;
   packet.button_id = button_id;
   packet.button_pushed = 1;
-  send(&packet_pointer);
+  send(&packet);
   listening = true; // Do this last
   listen_event.notify();
 }
 
-void Adapter::send() {
+void Adapter::send(data_packet_t* packet) {
 
   // Find next available location in ring buffer
   bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	     FREELOC, 1, true);
 
   // Write status packet to location
-  bus_p->burst_write((unsigned)button_id+10, (int*)&packet, 
+  bus_p->burst_write((unsigned)button_id+10, (int*)packet, 
 	      temp_read, 3, true);
   
   // Generate control word with location and button id
@@ -47,7 +47,7 @@ void Adapter::send() {
     // Read for releasing lock
     bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	       CONTROL_ADDRESS, 0, false);
-    wait(ADAPTER_PUSH_WAIT,sc_ms);
+    wait(ADAPTER_PUSH_WAIT,SC_MS);
     // Try reading again
     bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	       CONTROL_ADDRESS, 1, true);
@@ -71,11 +71,12 @@ void Adapter::main(void) {
 	if (temp_read != status) {
 	  status = temp_read;
 	  listening = temp_read;
-	  button->light(status);
+	  button_p->light(status);
 	}
 
-	wait(ADAPTER_LIGHT_WAIT, sc_ms);
+	wait(ADAPTER_LIGHT_WAIT, SC_MS);
       }
     else 
       wait(listen_event);
   }
+}

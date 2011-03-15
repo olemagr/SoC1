@@ -11,6 +11,8 @@ Control::Control(sc_module_name name)
 , priority(1)
 , my_addr(CONTROL_ADDRESS)
 { 
+    SC_HAS_PROCESS(Control);
+    SC_THREAD(main);
 }
 
 #define B_ADDR(button) BUTTON_STATUS_ADDRESS+button*BUTTON_STATUS_OFFSET

@@ -12,7 +12,7 @@ SB_SRCS = simple_bus.cpp \
 	  simple_bus_tools.cpp 
 
 # modify next line to your own source files
-SRCS = $(SB_SRCS) button.cpp control.cpp top.cpp
+SRCS = $(SB_SRCS) button.cpp control.cpp adapter.cpp top.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 all: run.x
@@ -23,9 +23,10 @@ button.o: if.h button.h button.cpp
 
 control.o: if.h control.h control.cpp
 
+adapter.o: adapter.h adapter.cpp
+
 top.o: if.h button.h control.h top.cpp adapter.h
 
-adapter.o: adapter.h adapter.cpp
 
 ifneq (, $(realpath $(HOME)/systemc/Makefile.defs))
 include ~/systemc/Makefile.defs
