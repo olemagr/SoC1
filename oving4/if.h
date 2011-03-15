@@ -4,7 +4,8 @@
 
 // Defines
 #define ADAPTER_UPDATE_PERIOD 100
-
+#define BUTTON_STATUS_ADDRESS 10
+#define FREELOC 1
 
 // Interface for Button
 class button_if : public sc_interface {
