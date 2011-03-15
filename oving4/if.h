@@ -6,11 +6,12 @@
 #define ADAPTER_UPDATE_PERIOD 100
 #define BUTTON_STATUS_ADDRESS 10
 #define FREELOC 1
+#define BUFFER_MAX_ADDRESS
 
 struct data_packet_t {
   int packet_size = 3;
   int button_id;
-  int button_pushed;
+  int button_pushed = 1;
 };
 
 // Interface for Button
