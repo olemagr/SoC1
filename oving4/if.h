@@ -3,12 +3,19 @@
 
 
 // Defines
-#define ADAPTER_UPDATE_PERIOD 4*100
-#define BUTTON_STATUS_ADDRESS 4*10
-#define BUTTON_STATUS_OFFSET 4*4
-#define FREELOC 4*500
-#define BUFFER_MAX_ADDRESS 4*1000
-#define CONTROL_ADDRESS 4*1
+#define CONTROL_ADDRESS 0
+#define FREELOC 4*1
+#define BUTTON_STATUS_ADDRESS 4*2
+
+#define BUFFER_START 4*18
+#define BUFFER_MAX_ADDRESS 4*1024
+#define BUTTON_STATUS_OFFSET 4
+
+#define TR 100
+#define ADAPTER_LIGHT_WAIT 10
+#define ADAPTER_PUSH_WAIT 5
+#define BUTTON_PUSH_INTERVAL 500
+#define CONTROL_SLEEP 1
 
 struct data_packet_t {
   int packet_size = 3;
