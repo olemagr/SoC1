@@ -11,8 +11,8 @@ SC_MODULE(Top)
 {
     public:
     // Instances
-    Button *button[9];
-    Adapter *adapter[9];
+    Button *button[10];
+    Adapter *adapter[10];
     Control *control;
     simple_bus *bus;
     simple_bus_arbiter *arbiter;
@@ -21,22 +21,22 @@ SC_MODULE(Top)
 
     Top (sc_module_name name);
     void test_thread(void);// Simulation thread
-    sc_signal<bool> pressSignals[9];// Signals for "pushing" the buttons
+    sc_signal<bool> pressSignals[10];// Signals for "pushing" the buttons
 };
 
 SC_HAS_PROCESS(Top);
 Top::Top (sc_module_name name) : sc_module (name) 
 { 
-    clock = new sc_clock("klokke", sc_time(10, SC_NS));
+    clock = new sc_clock("klokke", sc_time(500, SC_US));
     control = new Control("control");
     bus = new simple_bus("bus_inst");
     arbiter = new simple_bus_arbiter("arbiter");
     fast_mem = new simple_bus_fast_mem("fast_mem", 0, 4*1024-1);
     char buf[8];
-    for (int i = 0; i<9; i++) {
-        sprintf(buf, "button%d\0",i+1); //Gen. unique names for buttons
-        button[i] = new Button(buf, i+1); 
-        sprintf(buf, "adapter%d\0", i+1);
+    for (int i = 0; i<10; i++) {
+        sprintf(buf, "button%d\0",i); //Gen. unique names for buttons
+        button[i] = new Button(buf, i); 
+        sprintf(buf, "adapter%d\0", i);
         adapter[i] = new Adapter(buf);
         // Connect buttons to bus
         button[i]->bus(*adapter[i]); 
@@ -62,14 +62,21 @@ void Top::test_thread(void)
          << "Testing correct button sequence:\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
+        wait(1, SC_MS);
+        pressSignals[sequence1[i]].write(false);
         wait(BUTTON_PUSH_INTERVAL, SC_MS);
     }
+    pressSignals[0].write(true);
+    wait(1, SC_MS);
+    pressSignals[0].write(false);
+    wait(BUTTON_PUSH_INTERVAL, SC_MS);
     cout << "Testing incrementing button sequence:\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence2[i]].write(true);
         wait(BUTTON_PUSH_INTERVAL, SC_MS);
     }
     cout << "Testing complete.\n";
+    sc_stop();
 }
 
 int sc_main (int argc , char *argv[])  

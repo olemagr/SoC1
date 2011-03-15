@@ -32,24 +32,30 @@ void Adapter::send(data_packet_t* packet) {
   bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	     FREELOC, 1, true);
 
+    cout << temp_read << " - freeloc\n";
   // Write status packet to location
   bus_p->burst_write((unsigned)button_id+10, (int*)packet, 
 	      temp_read, 3, true);
+  cout << "written status packet.\n";
   
   // Generate control word with location and button id
   control_word = (temp_read<<16)|(1<<button_id);
 
   // Generate and write next location
-  temp_read = (temp_read+12) % BUFFER_MAX_ADDRESS;
+  temp_read = temp_read+12;
+  if (temp_read >= BUFFER_MAX_ADDRESS) temp_read = BUFFER_START;
   bus_p->burst_write((unsigned)button_id+10, &temp_read, 
 	      FREELOC, 3, true);
 
+    cout << "Written next location.\n";
   // Read control word
   bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	     CONTROL_ADDRESS, 1, true);
 
+  cout << "control thing - " << temp_read << "\n";
+
   // Loop until control unit available
-  while (!(temp_read & 0xFF)) {
+  while ((temp_read & 0xFF)) {
     // Read for releasing lock
     bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	       CONTROL_ADDRESS, 0, false);
@@ -71,7 +77,7 @@ void Adapter::main(void) {
       {
 	// Check memory
 	bus_p->burst_read((unsigned)button_id+10, &temp_read, 
-		   BUTTON_STATUS_ADDRESS + button_id,
+		   BUTTON_STATUS_ADDRESS + button_id*4,
 		   1, false);
 	
 	if (temp_read != status) {
