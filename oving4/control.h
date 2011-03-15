@@ -3,14 +3,21 @@
 
 #include <systemc.h>
 #include "if.h"
+#include "simple_bus_types.h" // for bus_status
 
-class control : public control_if, public sc_module {
-public:
-  sc_port<bus_if> bus;
-  control (sc_module_name);
-  virtual void push(int);
-private:
-  int count;
-  static const int X[9];
+class Control 
+: public sc_module 
+{
+    public:
+    // Port to Simple Bus' blocking interface, burst-read and -write.
+    sc_port<simple_bus_blocking_if> bus_p;
+
+    Control(sc_module_name);
+    main();
+
+    private:
+    int count;
+    int my_addr;
+    static const int X[9];
 };
 #endif 	    /* !CONTROL_H_ */
