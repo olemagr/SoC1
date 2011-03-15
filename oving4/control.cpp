@@ -19,7 +19,9 @@ void main()
     int bus_status, button;
     uint32_t *data;
     uint16_t mem_addr, button_id;
+    data_packet_t *packet;
     data = new uint32_t();
+    packet = new data_packet_t();
 
     while (true) {
         bus_status = burst_read(priority, data, my_addr);
@@ -34,12 +36,25 @@ void main()
                     while ((button_id >> 1) != 0)
                         button++;
                     // Read data package in memory address.
-                    if (bus_status = burst_read()) {
+                    bus_status = burst_read(priority, packet, 
+                                    mem_addr, 3, true); 
+                    if (bus_status) {
+                        // error handling.
+                    }
+                    // Update Memory Machine
+                    if (button == packet->button_id &&
+                        packet->button_pushed != 0) {
+                        if (button == X[count]) {
+                            count++;
+                            *data = 1;
+                            bus_status burst_write(priority, data, BUTTON_ 
+                            
+
+                        } else {
+
+                        }
                     }
 
-
-
-                    
                 }
                 break;
             case SIMPLE_BUS_ERROR:
@@ -60,6 +75,7 @@ void main()
     }
 
     delete data;
+    delete packet;
 }
 
 
