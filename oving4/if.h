@@ -18,7 +18,7 @@
 #define CONTROL_SLEEP 1
 
 struct data_packet_t {
-  int packet_size = 3;
+  const int packet_size = 3;
   int button_id;
   int button_pushed;
 };
