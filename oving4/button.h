@@ -4,13 +4,13 @@
 #include <systemc.h>
 #include "if.h"
 
-class button : public button_if, public sc_module
+class Button : public button_if, public sc_module
 {
 public:
   sc_in<bool> press;// Port for simulation of physical push
   sc_port<control_if> bus;
 
-  button (sc_module_name, int);
+  Button (sc_module_name, int);
   virtual void main(void);
   virtual void light (bool);
 private:

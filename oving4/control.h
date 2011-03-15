@@ -4,7 +4,7 @@
 #include <systemc.h>
 #include <stdint.h>
 #include "if.h"
-#include "simple_bus_types.h" // for bus_status
+#include "simple_bus.h"
 
 class Control 
 : public sc_module 
@@ -14,9 +14,10 @@ class Control
     sc_port<simple_bus_blocking_if> bus_p;
 
     Control(sc_module_name);
-    main();
+    void main();
 
     private:
+    int priority;
     int count;
     int my_addr;
     static const int X[9];

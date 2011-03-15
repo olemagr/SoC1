@@ -23,11 +23,11 @@ void Adapter::push (int b_id) {
 void Adapter::send() {
 
   // Find next available location in ring buffer
-  burst_read((unsigned)button_id+10, &temp_read, 
+  bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	     FREELOC, 1, true);
 
   // Write status packet to location
-  burst_write((unsigned)button_id+10, &packet, 
+  bus_p->burst_write((unsigned)button_id+10, (int*)&packet, 
 	      temp_read, 3, true);
   
   // Generate control word with location and button id
@@ -35,26 +35,26 @@ void Adapter::send() {
 
   // Generate and write next location
   temp_read = (temp_read+12) % BUFFER_MAX_ADDRESS;
-  burst_write((unsigned)button_id+10, &temp_read, 
+  bus_p->burst_write((unsigned)button_id+10, &temp_read, 
 	      FREELOC, 3, true);
 
   // Read control word
-  burst_read((unsigned)button_id+10, &temp_read, 
+  bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	     CONTROL_ADDRESS, 1, true);
 
   // Loop until control unit available
   while (!(temp_read & 0xFF)) {
     // Read for releasing lock
-    burst_read((unsigned)button_id+10, &temp_read, 
+    bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	       CONTROL_ADDRESS, 0, false);
     wait(ADAPTER_PUSH_WAIT,sc_ms);
     // Try reading again
-    burst_read((unsigned)button_id+10, &temp_read, 
+    bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 	       CONTROL_ADDRESS, 1, true);
   }
 
   // Write new control word and release bus
-  burst_write((unsigned)button_id+10, &control_word, 
+  bus_p->burst_write((unsigned)button_id+10, &control_word, 
 	      CONTROL_ADDRESS, 1, false);
 
 }
@@ -64,7 +64,7 @@ void Adapter::main(void) {
     if (listening)
       {
 	// Check memory
-	burst_read((unsigned)button_id+10, &temp_read, 
+	bus_p->burst_read((unsigned)button_id+10, &temp_read, 
 		   BUTTON_STATUS_ADDRESS + button_id,
 		   1, false);
 	
