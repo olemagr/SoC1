@@ -17,6 +17,7 @@ class Control
 
     private:
     int count;
+    int my_addr;
     static const int X[9];
 };
 #endif 	    /* !CONTROL_H_ */
