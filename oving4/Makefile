@@ -23,7 +23,9 @@ button.o: if.h button.h button.cpp
 
 control.o: if.h control.h control.cpp
 
-topp.o: button.h control.h top.cpp
+top.o: if.h button.h control.h top.cpp adapter.h
+
+adapter.o: adapter.h adapter.cpp
 
 ifneq (, $(realpath $(HOME)/systemc/Makefile.defs))
 include ~/systemc/Makefile.defs

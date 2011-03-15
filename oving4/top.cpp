@@ -1,4 +1,5 @@
 #include <systemc.h>
+#include "if.h"
 #include "button.h"
 #include "control.h"
 #include "simple_bus.h"
