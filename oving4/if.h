@@ -7,7 +7,7 @@
 #define BUTTON_STATUS_ADDRESS 10
 #define FREELOC 1
 
-typedef struct data_packet_t {
+struct data_packet_t {
   int packet_size = 3;
   int button_id;
   int button_pushed;
