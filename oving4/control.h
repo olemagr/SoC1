@@ -2,6 +2,7 @@
 # define   	CONTROL_H_
 
 #include <systemc.h>
+#include <stdint.h>
 #include "if.h"
 #include "simple_bus_types.h" // for bus_status
 

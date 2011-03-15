@@ -57,7 +57,7 @@ void Control::main()
             *data = 0;
             bs = burst_write(priority, data, my_addr);
         }
-        wait(CONTROL_SLEEP);
+        wait(CONTROL_SLEEP, sc_ms);
     }
 
     delete data;
