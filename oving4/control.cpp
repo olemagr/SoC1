@@ -64,9 +64,11 @@ void Control::main()
                     count = 0;
                     bs = bus_p->burst_write(priority, reset, B_ADDR(0), 10, true);
                 }
+            } else if (packet->button_pushed == 0) {
+                cout << "Control: Release packet, ignoring...\n";
             } else {
-                cout << "Control: \tStatus word points to invalid memory \
-                        location.\n";
+                cout << "Control: \tStatus word points "
+                     << "to invalid memory location.\n";
             }
             // Clear status word. (release lock)
             *data = 0;

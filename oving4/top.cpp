@@ -70,6 +70,36 @@ void Top::test_thread(void)
     wait(1, SC_MS);
     pressSignals[0].write(false);
     wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    for (int i = 0; i < 9; i++) {
+        pressSignals[sequence1[i]].write(true);
+        wait(1, SC_MS);
+        pressSignals[sequence1[i]].write(false);
+        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    }
+    pressSignals[0].write(true);
+    wait(1, SC_MS);
+    pressSignals[0].write(false);
+    wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    for (int i = 0; i < 9; i++) {
+        pressSignals[sequence1[i]].write(true);
+        wait(1, SC_MS);
+        pressSignals[sequence1[i]].write(false);
+        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    }
+    pressSignals[0].write(true);
+    wait(1, SC_MS);
+    pressSignals[0].write(false);
+    wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    for (int i = 0; i < 9; i++) {
+        pressSignals[sequence1[i]].write(true);
+        wait(1, SC_MS);
+        pressSignals[sequence1[i]].write(false);
+        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    }
+    pressSignals[0].write(true);
+    wait(1, SC_MS);
+    pressSignals[0].write(false);
+    wait(BUTTON_PUSH_INTERVAL, SC_MS);
     cout << "Test: \t\tTesting incorrect button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence2[i]].write(true);
