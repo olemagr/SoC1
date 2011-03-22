@@ -16,7 +16,6 @@ Adapter::Adapter (sc_module_name name) : sc_module (name)
 
 void Adapter::bounce() 
 {
-  int packet_size; 
   wait(TR, TIME_UNIT);
   sc_time interval( 3*TR ,TIME_UNIT);
   sc_time stop_time = sc_time_stamp() + interval;

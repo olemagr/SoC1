@@ -50,7 +50,6 @@ Top::Top (sc_module_name name) : sc_module (name)
     bus->slave_port(*fast_mem);
     control->bus_p(*bus);
     SC_THREAD(test_thread);
-    srand(time(NULL));
 }
 
 // Test method
@@ -63,44 +62,12 @@ void Top::test_thread(void)
          << "Test: \t\tTesting correct button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
-        wait(1, TIME_UNIT);
-        pressSignals[sequence1[i]].write(false);
         wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
+	pressSignals[sequence1[i]].write(false);
     }
     pressSignals[0].write(true);
-    wait(1, TIME_UNIT);
-    pressSignals[0].write(false);
     wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
-    for (int i = 0; i < 9; i++) {
-        pressSignals[sequence1[i]].write(true);
-        wait(1, TIME_UNIT);
-        pressSignals[sequence1[i]].write(false);
-        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
-    }
-    pressSignals[0].write(true);
-    wait(1, TIME_UNIT);
     pressSignals[0].write(false);
-    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
-    for (int i = 0; i < 9; i++) {
-        pressSignals[sequence1[i]].write(true);
-        wait(1, TIME_UNIT);
-        pressSignals[sequence1[i]].write(false);
-        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
-    }
-    pressSignals[0].write(true);
-    wait(1, TIME_UNIT);
-    pressSignals[0].write(false);
-    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
-    for (int i = 0; i < 9; i++) {
-        pressSignals[sequence1[i]].write(true);
-        wait(1, TIME_UNIT);
-        pressSignals[sequence1[i]].write(false);
-        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
-    }
-    pressSignals[0].write(true);
-    wait(1, TIME_UNIT);
-    pressSignals[0].write(false);
-    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     cout << "Test: \t\tTesting incorrect button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence2[i]].write(true);
@@ -112,7 +79,8 @@ void Top::test_thread(void)
 
 int sc_main (int argc , char *argv[])  
 {
-    Top top_inst("Top");
-    sc_start ();
-    return 0;
+  srand(time(NULL));
+  Top top_inst("Top");
+  sc_start ();
+  return 0;
 }
