@@ -13,14 +13,15 @@
 #define BUFFER_MAX_ADDRESS 4*1024
 #define BUTTON_STATUS_OFFSET 4
 
-#define ADAPTER_LIGHT_WAIT 10
-#define ADAPTER_PUSH_WAIT 5
-#define BUTTON_PUSH_INTERVAL 500
-#define CONTROL_SLEEP 1
+#define CLK_PERIOD 1
+#define ADAPTER_LIGHT_WAIT 100
+#define ADAPTER_PUSH_WAIT 20
+#define CONTROL_SLEEP 10
 #define INTERNAL_UNIT SC_US
 
-#define TR 100
-#define TR_UNIT SC_MS
+#define BUTTON_PUSH_INTERVAL 500000
+#define TR 10000
+#define TR_UNIT SC_US
 
 struct data_packet_t {
     data_packet_t() : packet_size(3){};
