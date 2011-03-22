@@ -58,8 +58,8 @@ void Top::test_thread(void)
     const int   sequence1[9] = {3,8,1,2,9,5,7,6,4},
                 sequence2[9] = {1,2,3,4,5,6,7,8,9};
 
-    cout << "Test: \tThread start.\n" 
-         << "Test: Testing correct button sequence...\n";
+    cout << "Test: \t\tThread start.\n" 
+         << "Test: \t\tTesting correct button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
         wait(1, SC_MS);
@@ -70,12 +70,12 @@ void Top::test_thread(void)
     wait(1, SC_MS);
     pressSignals[0].write(false);
     wait(BUTTON_PUSH_INTERVAL, SC_MS);
-    cout << "Test: \tTesting incorrect button sequence...\n";
+    cout << "Test: \t\tTesting incorrect button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence2[i]].write(true);
         wait(BUTTON_PUSH_INTERVAL, SC_MS);
     }
-    cout << "Test: \tTesting complete, stopping simulation.\n";
+    cout << "Test: \t\tTesting complete, stopping simulation.\n";
     sc_stop();
 }
 

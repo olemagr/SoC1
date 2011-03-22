@@ -32,6 +32,7 @@ void Control::main()
     packet = new data_packet_t;
 
     *data = BUFFER_START;
+    bs = bus_p->burst_write(priority, reset, B_ADDR(1), 9, true);
     bs = bus_p->burst_write(priority, data, FREELOC); 
     cout << "Control: \tInitiating main loop.\n";
     while (true) {
