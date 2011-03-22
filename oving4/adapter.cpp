@@ -14,16 +14,37 @@ Adapter::Adapter (sc_module_name name) : sc_module (name)
   status = 0;
 }
 
+void Adapter::bounce() 
+{
+  int packet_size; 
+  wait(TR, SC_MS);
+  sc_time interval( 3*TR ,SC_MS);
+  sc_time stop_time = sc_time_stamp() + interval;
+
+  while( (sc_time_stamp() < stop_time ) )
+    {
+      packet.packet_size = 3 + rand() % 18;
+      packet.button_id = button_id;
+      packet.button_pushed = 0;
+      send (&packet);
+      wait(TR, SC_MS);
+    }
+
+}
+
 void Adapter::pushlisten() 
 {
   while(true) 
     {
       wait(push_event);
+      packet.packet_size = 3;
       packet.button_id = button_id;
       packet.button_pushed = 1;
       send (&packet);
       listening = true;
       listen_event.notify();
+
+      //      bounce();
     }
 }
 
@@ -39,7 +60,15 @@ void Adapter::send(data_packet_t* packet)
   // Find next available location in ring buffer
   bus_p->burst_read(B_PRI(button_id), &temp_read, 
 		    FREELOC, 1, true);
-
+  cout << "Adapter:\tFreeloc: " << temp_read << endl;
+  
+  if ((temp_read+(packet->packet_size*4)) >= BUFFER_MAX_ADDRESS) 
+    {
+      cout << "Adapter:\tBuffer overflow. Temp was " << temp_read
+	   << ". Resetting to BUFFER_START\n";
+      temp_read = BUFFER_START;
+    } 
+  
   // Write status packet to location
   bus_p->burst_write(B_PRI(button_id), (int*)packet, 
 		     temp_read, 3, true);
@@ -48,8 +77,8 @@ void Adapter::send(data_packet_t* packet)
   control_word = (temp_read<<16)|(1<<button_id);
 
   // Generate and write next location
-  temp_read = temp_read+12;
-  if (temp_read >= BUFFER_MAX_ADDRESS) temp_read = BUFFER_START;
+  temp_read = temp_read + packet->packet_size*4;
+
   bus_p->burst_write(B_PRI(button_id), &temp_read, 
 		     FREELOC, 1, true);
 
