@@ -26,6 +26,7 @@ void Adapter::pushlisten()
       listen_event.notify();
     }
 }
+
 void Adapter::push (int b_id) 
 {
   button_id = b_id;
@@ -87,7 +88,10 @@ void Adapter::main(void)
 	
 	  if (temp_read != status) 
 	    {
-	      status = temp_read;     // Set new light status if it has changed in memory
+	      // Set new light status if it has changed in memory
+	      cout << "Button" << button_id << ": read new status " 
+		   << temp_read << " from memory.\n";
+	      status = temp_read;     
 	      // If the new status is false, we stop listening for changes, 
 	      // as the light will only be switched on after a button push
 	      listening = temp_read;  
@@ -97,6 +101,8 @@ void Adapter::main(void)
 	  wait(ADAPTER_LIGHT_WAIT, SC_MS);
 	}
       else 
-	wait(listen_event);
+	{
+	  wait(listen_event);
+	}
     }
 }
