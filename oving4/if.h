@@ -16,11 +16,11 @@
 #define ADAPTER_LIGHT_WAIT 100
 #define ADAPTER_PUSH_WAIT 50
 #define CONTROL_SLEEP 5
-#define INTERNAL_UNIT SC_US
+#define INTERNAL_UNIT SC_NS
 
-#define BUTTON_PUSH_INTERVAL 500
-#define TR 100
-#define TR_UNIT SC_MS
+#define BUTTON_PUSH_INTERVAL 500000
+#define TR 10
+#define TR_UNIT SC_NS
 
 struct data_packet_t {
     data_packet_t() : packet_size(3){};

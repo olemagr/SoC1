@@ -25,7 +25,7 @@ void Adapter::bounce()
       packet.button_id = button_id;
       packet.button_pushed = 0;
       send (&packet);
-      wait(rand()%2, TR_UNIT);
+      wait(rand()%TR, TR_UNIT);
     }
 
 }
