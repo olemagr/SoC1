@@ -13,9 +13,9 @@ void Button::light(bool b) {
   if(lightOn!=b) { // Toggle light if bool different
     lightOn=b;
     if(b)
-      cout <<"Button" << id ":\tLight on " << endl; // Output light change
+      cout <<"Button" << id << ":\tLight on " << endl; // Output light change
     else
-      cout <<"Button" << id ":\tLight off " << endl;
+      cout <<"Button" << id << ":\tLight off " << endl;
   }
 }
 // Called whenever button signal changes
