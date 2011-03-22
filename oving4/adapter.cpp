@@ -17,8 +17,8 @@ Adapter::Adapter (sc_module_name name) : sc_module (name)
 void Adapter::bounce() 
 {
   int packet_size; 
-  wait(TR, TIME_UNIT);
-  sc_time interval( 3*TR ,TIME_UNIT);
+  wait(TR, TR_UNIT);
+  sc_time interval( 3*TR ,TR_UNIT);
   sc_time stop_time = sc_time_stamp() + interval;
 
   while( (sc_time_stamp() < stop_time ) )
@@ -27,7 +27,7 @@ void Adapter::bounce()
       packet.button_id = button_id;
       packet.button_pushed = 0;
       send (&packet);
-      wait(rand()%TR, TIME_UNIT);
+      wait(rand()%2, TR_UNIT);
     }
 
 }
@@ -60,11 +60,11 @@ void Adapter::send(data_packet_t* packet)
   // Find next available location in ring buffer
   bus_p->burst_read(B_PRI(button_id), &temp_read, 
 		    FREELOC, 1, true);
-  cout << "Adapter:\tFreeloc: " << temp_read << endl;
-  cout << "Adapter:\tPacket size: " << packet->packet_size << endl;
+  cout << sc_time_stamp() << "|Adapter:\tFreeloc: " << temp_read << endl;
+  cout << sc_time_stamp() << "|Adapter:\tPacket size: " << packet->packet_size << endl;
   if ((temp_read+(packet->packet_size*4)) >= BUFFER_MAX_ADDRESS) 
     {
-      cout << "Adapter:\tBuffer overflow. Temp was " << temp_read
+      cout << sc_time_stamp() << "|Adapter:\tBuffer overflow. Temp was " << temp_read
 	   << ". Resetting to BUFFER_START\n";
       temp_read = BUFFER_START;
     } 
@@ -93,7 +93,7 @@ void Adapter::send(data_packet_t* packet)
       bus_p->burst_read(B_PRI(button_id), &temp_read, 
 			CONTROL_ADDRESS, 0, false);
       // Wait for defined wait interval
-      wait(ADAPTER_PUSH_WAIT,TIME_UNIT);
+      wait(ADAPTER_PUSH_WAIT,INTERNAL_UNIT);
       // Try reading again
       bus_p->burst_read(B_PRI(button_id), &temp_read, 
 			CONTROL_ADDRESS, 1, true);
@@ -126,7 +126,7 @@ void Adapter::main(void)
 	      button_p->light(status);
 	    }
 
-	  wait(ADAPTER_LIGHT_WAIT, TIME_UNIT);
+	  wait(ADAPTER_LIGHT_WAIT, INTERNAL_UNIT);
 	}
       else 
 	{
