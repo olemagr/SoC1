@@ -51,7 +51,7 @@ void Adapter::send(data_packet_t* packet)
   temp_read = temp_read+12;
   if (temp_read >= BUFFER_MAX_ADDRESS) temp_read = BUFFER_START;
   bus_p->burst_write(B_PRI(button_id), &temp_read, 
-		     FREELOC, 3, true);
+		     FREELOC, 1, true);
 
   // Read control word
   bus_p->burst_read(B_PRI(button_id), &temp_read, 
@@ -89,8 +89,6 @@ void Adapter::main(void)
 	  if (temp_read != status) 
 	    {
 	      // Set new light status if it has changed in memory
-	      cout << "Button" << button_id << ": read new status " 
-		   << temp_read << " from memory.\n";
 	      status = temp_read;     
 	      // If the new status is false, we stop listening for changes, 
 	      // as the light will only be switched on after a button push
