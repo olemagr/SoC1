@@ -42,7 +42,6 @@ void Adapter::send(data_packet_t* packet)
   // Write status packet to location
   bus_p->burst_write(B_PRI(button_id), (int*)packet, 
 		     temp_read, 3, true);
-  cout << "written status packet.\n";
   
   // Generate control word with location and button id
   control_word = (temp_read<<16)|(1<<button_id);
@@ -53,12 +52,9 @@ void Adapter::send(data_packet_t* packet)
   bus_p->burst_write(B_PRI(button_id), &temp_read, 
 		     FREELOC, 3, true);
 
-  cout << "Written next location.\n";
   // Read control word
   bus_p->burst_read(B_PRI(button_id), &temp_read, 
 		    CONTROL_ADDRESS, 1, true);
-
-  cout << "control thing - " << temp_read << "\n";
 
   // Loop until control unit available
   while ((temp_read & 0xFF)) 
@@ -66,6 +62,7 @@ void Adapter::send(data_packet_t* packet)
       // Read for releasing lock
       bus_p->burst_read(B_PRI(button_id), &temp_read, 
 			CONTROL_ADDRESS, 0, false);
+      // Wait for defined wait interval
       wait(ADAPTER_PUSH_WAIT,SC_MS);
       // Try reading again
       bus_p->burst_read(B_PRI(button_id), &temp_read, 
