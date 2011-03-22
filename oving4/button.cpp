@@ -13,16 +13,16 @@ void Button::light(bool b) {
   if(lightOn!=b) { // Toggle light if bool different
     lightOn=b;
     if(b)
-      cout <<"Light on " << id << endl; // Output light change
+      cout <<"Button" << id ":\tLight on " << endl; // Output light change
     else
-      cout <<"Light off " << id << endl;
+      cout <<"Button" << id ":\tLight off " << endl;
   }
 }
 // Called whenever button signal changes
 void Button::main(void) {
   if (press.read() == true)
     {
-      cout << "Button "<<id<<" was pressed!\n";
+      cout << "Button"<<id<<":\tPushed.\n";
       bus->push(id);
     }
 }
