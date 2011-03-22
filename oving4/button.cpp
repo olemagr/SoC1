@@ -15,10 +15,10 @@ void Button::light(bool b)
   if(lightOn!=b) 
     { // Toggle light if bool different
       lightOn=b;
-      if(b)
-	cout <<"Button " << id << ": Light on " << endl; // Output light change
+      if(b)// Output light change
+	cout << sc_time_stamp() <<"|Button " << id << ": Light on " << endl; 
       else
-	cout <<"Button " << id << ": Light off " << endl;
+	cout << sc_time_stamp() << "|Button " << id << ": Light off " << endl;
     }
 }
 
@@ -27,7 +27,7 @@ void Button::main(void)
 {
   if (press.read() == true)
     {
-      cout << "Button "<<id<<": Pushed.\n";
+      cout << sc_time_stamp() << "|Button "<<id<<": Pushed.\n";
       bus->push(id);
     }
 }

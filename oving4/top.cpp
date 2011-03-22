@@ -27,7 +27,7 @@ SC_MODULE(Top)
 SC_HAS_PROCESS(Top);
 Top::Top (sc_module_name name) : sc_module (name) 
 { 
-    clock = new sc_clock("klokke", sc_time(1, TIME_UNIT));
+    clock = new sc_clock("klokke", sc_time(1, INTERNAL_UNIT));
     control = new Control("control");
     bus = new simple_bus("bus_inst");
     arbiter = new simple_bus_arbiter("arbiter");
@@ -62,16 +62,16 @@ void Top::test_thread(void)
          << "Test: \t\tTesting correct button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
-        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
+        wait(BUTTON_PUSH_INTERVAL, TR_UNIT);
 	pressSignals[sequence1[i]].write(false);
     }
     pressSignals[0].write(true);
-    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
+    wait(BUTTON_PUSH_INTERVAL, TR_UNIT);
     pressSignals[0].write(false);
     cout << "Test: \t\tTesting incorrect button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence2[i]].write(true);
-        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
+        wait(BUTTON_PUSH_INTERVAL, TR_UNIT);
     }
     cout << "Test: \t\tTesting complete, stopping simulation.\n";
     sc_stop();
