@@ -58,12 +58,12 @@ void Adapter::send(data_packet_t* packet)
   // Find next available location in ring buffer
   bus_p->burst_read(B_PRI(button_id), &temp_read, 
 		    FREELOC, 1, true);
-  cout << sc_time_stamp() << "|Adapter:\tFreeloc: " << temp_read << endl;
-  cout << sc_time_stamp() << "|Adapter:\tPacket size: " << packet->packet_size << endl;
+  //cout << sc_time_stamp() << "|Adapter:\tFreeloc: " << temp_read << endl;
+  //cout << sc_time_stamp() << "|Adapter:\tPacket size: " << packet->packet_size << endl;
   if ((temp_read+(packet->packet_size*4)) >= BUFFER_MAX_ADDRESS) 
     {
-      cout << sc_time_stamp() << "|Adapter:\tBuffer overflow. Temp was " << temp_read
-	   << ". Resetting to BUFFER_START\n";
+      //cout << sc_time_stamp() << "|Adapter:\tBuffer overflow. Temp was " << temp_read
+	  // << ". Resetting to BUFFER_START\n";
       temp_read = BUFFER_START;
     } 
   
