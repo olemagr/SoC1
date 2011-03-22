@@ -33,13 +33,13 @@ void Control::main()
 
     *data = BUFFER_START;
     bs = bus_p->burst_write(priority, data, FREELOC); 
-    cout << "Control: Initiating main loop.\n";
+    cout << "Control: \tInitiating main loop.\n";
     while (true) {
         // Read status word.
         bs = bus_p->burst_read(priority, data, my_addr);
 
         if (*data != 0) {
-            cout << "Control: Status word change detected: ";
+            cout << "Control: \tStatus word change detected: ";
             printf("%x\n", *data);
             // Get content of status word
             button_id = (uint16_t)(*data & 0x0000FFFF);
@@ -54,17 +54,17 @@ void Control::main()
             if (button == packet->button_id &&
                 packet->button_pushed != 0) {
                 if (button == X[count]) { // Button push was correct
-                    cout << "Control: Button" << button << " correct.\n";
+                    cout << "Control: \tButton" << button << " correct.\n";
                     count++;
                     *data = 1;
                     bs = bus_p->burst_write(priority, data, B_ADDR(button), 1, true);
                 } else { // Button push was wrong, reset lights
-                    cout << "Control: Button" << button << " incorrect.\n";
+                    cout << "Control: \tButton" << button << " incorrect.\n";
                     count = 0;
                     bs = bus_p->burst_write(priority, reset, B_ADDR(1), 9, true);
                 }
             } else {
-                cout << "Control: Status word points to invalid memory \
+                cout << "Control: \tStatus word points to invalid memory \
                         location.\n";
             }
             // Clear status word. (release lock)
