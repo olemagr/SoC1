@@ -27,7 +27,7 @@ SC_MODULE(Top)
 SC_HAS_PROCESS(Top);
 Top::Top (sc_module_name name) : sc_module (name) 
 { 
-    clock = new sc_clock("klokke", sc_time(1, INTERNAL_UNIT));
+    clock = new sc_clock("klokke", sc_time(CLK_PERIOD, INTERNAL_UNIT));
     control = new Control("control");
     bus = new simple_bus("bus_inst");
     arbiter = new simple_bus_arbiter("arbiter");
