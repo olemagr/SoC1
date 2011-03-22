@@ -19,6 +19,8 @@
 #define BUTTON_PUSH_INTERVAL 500
 #define CONTROL_SLEEP 1
 
+#define TIME_UNIT SC_US
+
 struct data_packet_t {
     data_packet_t() : packet_size(3){};
     data_packet_t(int _id, int _push)

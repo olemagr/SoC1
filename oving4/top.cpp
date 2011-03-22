@@ -27,7 +27,7 @@ SC_MODULE(Top)
 SC_HAS_PROCESS(Top);
 Top::Top (sc_module_name name) : sc_module (name) 
 { 
-    clock = new sc_clock("klokke", sc_time(1, SC_MS));
+    clock = new sc_clock("klokke", sc_time(1, TIME_UNIT));
     control = new Control("control");
     bus = new simple_bus("bus_inst");
     arbiter = new simple_bus_arbiter("arbiter");
@@ -63,48 +63,48 @@ void Top::test_thread(void)
          << "Test: \t\tTesting correct button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
-        wait(1, SC_MS);
+        wait(1, TIME_UNIT);
         pressSignals[sequence1[i]].write(false);
-        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     }
     pressSignals[0].write(true);
-    wait(1, SC_MS);
+    wait(1, TIME_UNIT);
     pressSignals[0].write(false);
-    wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
-        wait(1, SC_MS);
+        wait(1, TIME_UNIT);
         pressSignals[sequence1[i]].write(false);
-        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     }
     pressSignals[0].write(true);
-    wait(1, SC_MS);
+    wait(1, TIME_UNIT);
     pressSignals[0].write(false);
-    wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
-        wait(1, SC_MS);
+        wait(1, TIME_UNIT);
         pressSignals[sequence1[i]].write(false);
-        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     }
     pressSignals[0].write(true);
-    wait(1, SC_MS);
+    wait(1, TIME_UNIT);
     pressSignals[0].write(false);
-    wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence1[i]].write(true);
-        wait(1, SC_MS);
+        wait(1, TIME_UNIT);
         pressSignals[sequence1[i]].write(false);
-        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     }
     pressSignals[0].write(true);
-    wait(1, SC_MS);
+    wait(1, TIME_UNIT);
     pressSignals[0].write(false);
-    wait(BUTTON_PUSH_INTERVAL, SC_MS);
+    wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     cout << "Test: \t\tTesting incorrect button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence2[i]].write(true);
-        wait(BUTTON_PUSH_INTERVAL, SC_MS);
+        wait(BUTTON_PUSH_INTERVAL, TIME_UNIT);
     }
     cout << "Test: \t\tTesting complete, stopping simulation.\n";
     sc_stop();

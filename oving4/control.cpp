@@ -74,7 +74,7 @@ void Control::main()
             *data = 0;
             bs = bus_p->burst_write(priority, data, my_addr);
         }
-        wait(CONTROL_SLEEP, SC_MS);
+        wait(CONTROL_SLEEP, TIME_UNIT);
     }
 
     delete data;

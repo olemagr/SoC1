@@ -17,8 +17,8 @@ Adapter::Adapter (sc_module_name name) : sc_module (name)
 void Adapter::bounce() 
 {
   int packet_size; 
-  wait(TR, SC_MS);
-  sc_time interval( 3*TR ,SC_MS);
+  wait(TR, TIME_UNIT);
+  sc_time interval( 3*TR ,TIME_UNIT);
   sc_time stop_time = sc_time_stamp() + interval;
 
   while( (sc_time_stamp() < stop_time ) )
@@ -27,7 +27,7 @@ void Adapter::bounce()
       packet.button_id = button_id;
       packet.button_pushed = 0;
       send (&packet);
-      wait(rand()%TR, SC_MS);
+      wait(rand()%TR, TIME_UNIT);
     }
 
 }
@@ -93,7 +93,7 @@ void Adapter::send(data_packet_t* packet)
       bus_p->burst_read(B_PRI(button_id), &temp_read, 
 			CONTROL_ADDRESS, 0, false);
       // Wait for defined wait interval
-      wait(ADAPTER_PUSH_WAIT,SC_MS);
+      wait(ADAPTER_PUSH_WAIT,TIME_UNIT);
       // Try reading again
       bus_p->burst_read(B_PRI(button_id), &temp_read, 
 			CONTROL_ADDRESS, 1, true);
@@ -126,7 +126,7 @@ void Adapter::main(void)
 	      button_p->light(status);
 	    }
 
-	  wait(ADAPTER_LIGHT_WAIT, SC_MS);
+	  wait(ADAPTER_LIGHT_WAIT, TIME_UNIT);
 	}
       else 
 	{
