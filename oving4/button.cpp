@@ -16,9 +16,9 @@ void Button::light(bool b)
     { // Toggle light if bool different
       lightOn=b;
       if(b)
-	cout <<"Button " << id << ":\tLight on " << endl; // Output light change
+	cout <<"Button " << id << ": Light on " << endl; // Output light change
       else
-	cout <<"Button " << id << ":\tLight off " << endl;
+	cout <<"Button " << id << ": Light off " << endl;
     }
 }
 
@@ -27,7 +27,7 @@ void Button::main(void)
 {
   if (press.read() == true)
     {
-      cout << "Button "<<id<<":\tPushed.\n";
+      cout << "Button "<<id<<": Pushed.\n";
       bus->push(id);
     }
 }

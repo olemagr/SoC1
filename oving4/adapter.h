@@ -22,7 +22,7 @@ class Adapter : public control_if, public sc_module
   sc_event push_event;
   bool listening;
   int button_id, packet_address;
-  int status, control_word;
+  int status;
   data_packet_t packet;
 };
 #endif

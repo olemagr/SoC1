@@ -27,7 +27,7 @@ SC_MODULE(Top)
 SC_HAS_PROCESS(Top);
 Top::Top (sc_module_name name) : sc_module (name) 
 { 
-    clock = new sc_clock("klokke", sc_time(500, SC_US));
+    clock = new sc_clock("klokke", sc_time(1, SC_MS));
     control = new Control("control");
     bus = new simple_bus("bus_inst");
     arbiter = new simple_bus_arbiter("arbiter");
@@ -50,6 +50,7 @@ Top::Top (sc_module_name name) : sc_module (name)
     bus->slave_port(*fast_mem);
     control->bus_p(*bus);
     SC_THREAD(test_thread);
+    srand(time(NULL));
 }
 
 // Test method

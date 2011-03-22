@@ -27,7 +27,7 @@ void Adapter::bounce()
       packet.button_id = button_id;
       packet.button_pushed = 0;
       send (&packet);
-      wait(TR, SC_MS);
+      wait(rand()%TR, SC_MS);
     }
 
 }
@@ -44,7 +44,7 @@ void Adapter::pushlisten()
       listening = true;
       listen_event.notify();
 
-      //      bounce();
+      bounce();
     }
 }
 
@@ -56,7 +56,7 @@ void Adapter::push (int b_id)
 
 void Adapter::send(data_packet_t* packet) 
 {
-  int temp_read;
+  int temp_read, control_word;
   // Find next available location in ring buffer
   bus_p->burst_read(B_PRI(button_id), &temp_read, 
 		    FREELOC, 1, true);
@@ -113,7 +113,7 @@ void Adapter::main(void)
       if (listening)
 	{
 	  // Check memory
-	  bus_p->burst_read(B_PRI(button_id), &temp_read, 
+	  bus_p->burst_read(B_PRI(button_id+10), &temp_read, 
 			    B_ADDR(button_id), 1, false);
 	
 	  if (temp_read != status) 
