@@ -50,6 +50,7 @@ Top::Top (sc_module_name name) : sc_module (name)
     bus->slave_port(*fast_mem);
     control->bus_p(*bus);
     SC_THREAD(test_thread);
+    srand(time(NULL));
 }
 
 // Test method
@@ -68,7 +69,8 @@ void Top::test_thread(void)
     pressSignals[0].write(true);
     wait(BUTTON_PUSH_INTERVAL, TR_UNIT);
     pressSignals[0].write(false);
-    cout << "Test: \t\tTesting incorrect button sequence...\n";
+    wait(BUTTON_PUSH_INTERVAL, TR_UNIT);
+   cout << "Test: \t\tTesting incorrect button sequence...\n";
     for (int i = 0; i < 9; i++) {
         pressSignals[sequence2[i]].write(true);
         wait(BUTTON_PUSH_INTERVAL, TR_UNIT);
@@ -79,8 +81,7 @@ void Top::test_thread(void)
 
 int sc_main (int argc , char *argv[])  
 {
-  srand(time(NULL));
-  Top top_inst("Top");
-  sc_start ();
-  return 0;
+    Top top_inst("Top");
+    sc_start ();
+    return 0;
 }
