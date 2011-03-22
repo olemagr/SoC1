@@ -27,12 +27,12 @@ void Control::main()
     data_packet_t *packet;
 
     data = new int;
-    reset = new int[9];
-    memset(reset, 0, 9*sizeof(uint32_t));
+    reset = new int[10];
+    memset(reset, 0, 10*sizeof(uint32_t));
     packet = new data_packet_t;
 
     *data = BUFFER_START;
-    bs = bus_p->burst_write(priority, reset, B_ADDR(1), 9, true);
+    bs = bus_p->burst_write(priority, reset, B_ADDR(0), 10, true);
     bs = bus_p->burst_write(priority, data, FREELOC); 
     cout << "Control: \tInitiating main loop.\n";
     while (true) {
@@ -62,7 +62,7 @@ void Control::main()
                 } else { // Button push was wrong, reset lights
                     cout << "Control: \tButton" << button << " incorrect.\n";
                     count = 0;
-                    bs = bus_p->burst_write(priority, reset, B_ADDR(1), 9, true);
+                    bs = bus_p->burst_write(priority, reset, B_ADDR(0), 10, true);
                 }
             } else {
                 cout << "Control: \tStatus word points to invalid memory \
