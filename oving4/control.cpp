@@ -40,8 +40,8 @@ void Control::main()
         bs = bus_p->burst_read(priority, data, my_addr);
 
         if (*data != 0) {
-            //cout << sc_time_stamp() << "|Control: \tStatus word change detected: ";
-            //printf("%x\n", *data);
+            cout << sc_time_stamp() << "|Control: \tStatus word change detected: ";
+            printf("%x\n", *data);
             // Get content of status word
             button_id = (uint16_t)(*data & 0x0000FFFF);
             mem_addr = (uint16_t)(*data >> 16);

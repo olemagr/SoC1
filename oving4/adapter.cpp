@@ -17,15 +17,24 @@ Adapter::Adapter (sc_module_name name) : sc_module (name)
 void Adapter::bounce() 
 {
   wait(TR, TR_UNIT);
+  //  cout << sc_time_stamp() << "|Adapter:\tDone waiting in bounce" << endl;
+
+  int dummysize;
   sc_time interval( 3*TR ,TR_UNIT);
   sc_time stop_time = sc_time_stamp() + interval;
-  while( (sc_time_stamp() < stop_time ) )
+  while( sc_time_stamp() < stop_time )
     {
-      packet.packet_size = 3 + rand() % 18;
+      dummysize = rand() % 18;
+      packet.packet_size = 3 + dummysize;
       packet.button_id = button_id;
       packet.button_pushed = 0;
+      packet.dummy = new int[dummysize];
+      memset( packet.dummy, 0, dummysize*sizeof(int) );
+      // cout << sc_time_stamp() << "|Adapter:\tCalling dummy send" << endl;
+ 
       send (&packet);
-      wait(rand()%TR, TR_UNIT);
+      delete [] packet.dummy;
+      //      wait(rand()%TR, TR_UNIT);
     }
 
 }
@@ -41,7 +50,7 @@ void Adapter::pushlisten()
       send (&packet);
       listening = true;
       listen_event.notify();
-
+      //cout << sc_time_stamp() << "|Adapter:\tCalling bounce" << endl;
       bounce();
     }
 }
@@ -63,14 +72,23 @@ void Adapter::send(data_packet_t* packet)
   if ((temp_read+(packet->packet_size*4)) >= BUFFER_MAX_ADDRESS) 
     {
       //cout << sc_time_stamp() << "|Adapter:\tBuffer overflow. Temp was " << temp_read
-	  // << ". Resetting to BUFFER_START\n";
+      //   << ". Resetting to BUFFER_START\n";
       temp_read = BUFFER_START;
     } 
   
   // Write status packet to location
   bus_p->burst_write(B_PRI(button_id), (int*)packet, 
 		     temp_read, 3, true);
-  
+
+  if ( int dummy_size = (packet->packet_size - 3) )
+    {
+      //cout << sc_time_stamp() << "|Adapter:\tWriting dummy data: " << dummy_size << endl;
+      bus_p->burst_write(B_PRI(button_id), packet->dummy, 
+			 temp_read + 12, dummy_size, true);
+      //cout << sc_time_stamp() << "|Adapter:\tDone writing dummy data: " << dummy_size << endl;
+
+    }
+
   // Generate control word with location and button id
   control_word = (temp_read<<16)|(1<<button_id);
 
@@ -79,28 +97,32 @@ void Adapter::send(data_packet_t* packet)
 
   bus_p->burst_write(B_PRI(button_id), &temp_read, 
 		     FREELOC, 1, true);
-
-  // Read control word
-  bus_p->burst_read(B_PRI(button_id), &temp_read, 
-		    CONTROL_ADDRESS, 1, true);
-
-  // Loop until control unit available
-  while ((temp_read & 0xFF)) 
+  
+  if (packet->button_pushed != 0)
     {
-      // Read for releasing lock
-      bus_p->burst_read(B_PRI(button_id), &temp_read, 
-			CONTROL_ADDRESS, 0, false);
-      // Wait for defined wait interval
-      wait(ADAPTER_PUSH_WAIT,INTERNAL_UNIT);
-      // Try reading again
+      cout << sc_time_stamp() << "|Adapter:\tButton pushed, writing to control." << endl;
+      // Read control word
       bus_p->burst_read(B_PRI(button_id), &temp_read, 
 			CONTROL_ADDRESS, 1, true);
+
+      // Loop until control unit available
+      while ((temp_read & 0xFF)) 
+	{
+	  // Read for releasing lock
+	  bus_p->burst_read(B_PRI(button_id), &temp_read, 
+			    CONTROL_ADDRESS, 0, false);
+	  // Wait for defined wait interval
+	  wait(ADAPTER_PUSH_WAIT,INTERNAL_UNIT);
+	  // Try reading again
+	  bus_p->burst_read(B_PRI(button_id), &temp_read, 
+			    CONTROL_ADDRESS, 1, true);
+	}
+
+      // Write new control word and release bus
+      bus_p->burst_write(B_PRI(button_id), &control_word, 
+			 CONTROL_ADDRESS, 1, false);
+      cout << sc_time_stamp() << "|Adapter:\tDone with control manipulation." << endl;
     }
-
-  // Write new control word and release bus
-  bus_p->burst_write(B_PRI(button_id), &control_word, 
-		     CONTROL_ADDRESS, 1, false);
-
 }
 
 void Adapter::main(void) 
