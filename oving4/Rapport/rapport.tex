@@ -25,6 +25,31 @@ all the packets.
 
 \section*{Task 2}
 
+The adapter functionality was split into two threads, one listening for
+changes to the button status in memory, and one responding to button pushes.
+The adapter had to implement the bus interface from the previous assignment
+to be compatible with the buttons. The functionality of the inherited push
+method was reduced to notifying the button push thread(pushListen).
+
+The thread waiting for changes to the status in memory(main) simply reads the 
+corresponding status location at set intervals, and calls the light function
+of the button whenever it is necessary. It does not start reading from memory
+until notified by pushListen, as the light will never be lit before the button
+has been pushed.
+
+The pushListen thread generates a new packet when notified, and uses the send
+method to write it to the bus. It also calls a bounce method that generates 
+one or more releasepackets (task 5).
+
+The send method is pretty much implemented as specified in the assignment text.
+The ring buffer pointer is checked to be suitable to the packet size and set to 
+the base buffer address if the end is reached. First the basic packet is sent, 
+and in case of a bigger packet (task 5) the rest is sent in a separate burst.
+
+  
+
+
+
 \section*{Task 3}
 The basic functionality of the control is kept the same as in exercise two, but
 the communication with the other modules had to be adapted to fit the new bus
