@@ -12,16 +12,16 @@ class Adapter : public control_if, public sc_module
   sc_port<simple_bus_blocking_if> bus_p;
   
   Adapter (sc_module_name);
-  virtual void main(void);
-  void pushlisten(void);
   virtual void push (int);  
-  void send(data_packet_t*);
  private:
+  virtual void main(void);
+  void send(data_packet_t*);
+  void pushlisten(void);
   void bounce(void);
   sc_event listen_event;
   sc_event push_event;
   bool listening;
-  int button_id, packet_address;
+  int button_id;
   int status;
   data_packet_t packet;
 };
