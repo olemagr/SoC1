@@ -21,7 +21,7 @@ Control::Control(sc_module_name name)
  */
 void Control::main()
 {
-    int bs, button;
+    int button;
     int *data, *reset;
     uint16_t mem_addr, button_id;
     data_packet_t *packet;
@@ -32,16 +32,13 @@ void Control::main()
     packet = new data_packet_t;
 
     *data = BUFFER_START;
-    bs = bus_p->burst_write(priority, reset, B_ADDR(0), 10, true);
-    bs = bus_p->burst_write(priority, data, FREELOC); 
-    //cout << sc_time_stamp() << "|Control: \tInitiating main loop.\n";
+    bus_p->burst_write(priority, reset, B_ADDR(0), 10, true);
+    bus_p->burst_write(priority, data, FREELOC); 
     while (true) {
         // Read status word.
-        bs = bus_p->burst_read(priority, data, my_addr);
+        bus_p->burst_read(priority, data, my_addr);
 
         if (*data != 0) {
-            cout << sc_time_stamp() << "|Control: \tStatus word change detected: ";
-            printf("%x\n", *data);
             // Get content of status word
             button_id = (uint16_t)(*data & 0x0000FFFF);
             mem_addr = (uint16_t)(*data >> 16);
@@ -50,29 +47,22 @@ void Control::main()
                 button++;
 
             // Read data package in memory address.
-            bs = bus_p->burst_read(priority, (int*)packet, (int)mem_addr, 3, true); 
+            bus_p->burst_read(priority, (int*)packet, (int)mem_addr, 3, true); 
             // Update Memory Machine
             if (button == packet->button_id &&
                 packet->button_pushed != 0) {
                 if (button == X[count]) { // Button push was correct
-                    //cout << sc_time_stamp() << "|Control: \tButton" << button << " correct.\n";
                     count++;
                     *data = 1;
-                    bs = bus_p->burst_write(priority, data, B_ADDR(button), 1, true);
+                    bus_p->burst_write(priority, data, B_ADDR(button), 1, true);
                 } else { // Button push was wrong, reset lights
-                    //cout << sc_time_stamp() << "|Control: \tButton" << button << " incorrect.\n";
                     count = 0;
-                    bs = bus_p->burst_write(priority, reset, B_ADDR(0), 10, true);
+                    bus_p->burst_write(priority, reset, B_ADDR(0), 10, true);
                 }
-            } else if (packet->button_pushed == 0) {
-                //cout << sc_time_stamp() << "|Control: \tRelease packet, ignoring...\n";
-            } else {
-                //cout << sc_time_stamp() << "|Control: \tStatus word points "
-                //     << "to invalid memory location.\n";
             }
             // Clear status word. (release lock)
             *data = 0;
-            bs = bus_p->burst_write(priority, data, my_addr);
+            bus_p->burst_write(priority, data, my_addr);
         }
         wait(CONTROL_SLEEP, INTERNAL_UNIT);
     }
