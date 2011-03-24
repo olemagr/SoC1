@@ -44,7 +44,13 @@ while, before it again checks to see if its status word is set to any non-zero
 value.
 
 \section*{Task 4}
-
+The only difference in the top module from exercise 2, is the change of bus.
+SimpleBus is more complex than the naive bus in exercise 2, and requires a
+sc\_clock instance to clock the bus. The period specified in the sc\_clock needs
+to be much less than the Tr, which the exercise specifies. This is so that the
+bus can manage the communication before a new button is pressed.\\
+\\With a clock period of 10us, the same testbed from exercise 2, produces
+correct result. 
 
 
 \end{document}
