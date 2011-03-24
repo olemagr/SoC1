@@ -33,7 +33,6 @@ void Adapter::bounce()
       memset( packet.dummy, 0, dummysize*sizeof(int) ); // Set garbage to zeroes
       send (&packet);
       delete [] packet.dummy; 
-      wait(rand()%TR, TR_UNIT);
     }
 
 }
@@ -100,24 +99,15 @@ void Adapter::send(data_packet_t* packet)
   bus_p->burst_write(B_PRI(button_id), &temp_read, 
 		     FREELOC, 1, true);
   
-  if (packet->button_pushed != 0) // Releasepackets does not wait for free control
-    {
-      // Read control word
-      bus_p->burst_read(B_PRI(button_id), &temp_read, 
-			CONTROL_ADDRESS, 1, true);
+  // Read control word
+  bus_p->burst_read(B_PRI(button_id), &temp_read, 
+		    CONTROL_ADDRESS, 1, true);
+  
+  // Write new control word if control word is clear
+  if (!temp_read) 
+    bus_p->burst_write(B_PRI(button_id), &control_word, 
+		       CONTROL_ADDRESS, 1, false);
 
-      // Loop until control unit available
-      while ((temp_read & 0xFF)) 
-	{
-	  wait(ADAPTER_PUSH_WAIT,INTERNAL_UNIT);
-	  bus_p->burst_read(B_PRI(button_id), &temp_read, 
-			    CONTROL_ADDRESS, 1, true);
-	}
-
-      // Write new control word
-      bus_p->burst_write(B_PRI(button_id), &control_word, 
-			 CONTROL_ADDRESS, 1, false);
-    }
 }
 
 /*
