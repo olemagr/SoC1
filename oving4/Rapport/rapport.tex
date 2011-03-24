@@ -12,12 +12,39 @@
 
 
 \section*{Task 1}
-
+We divided the memory layout into two part: A static part containing all the
+status words for the different modules and freeloc, and a circular buffer for
+all the packets. 
+\\
+\\Addresses in FastMem (byte-indexed)
+\\0x000 Control status word
+\\0x004 freeloc
+\\0x008 - 0x044 Adapter/Button status words
+\\0x048 Start of circular buffer
+\\0xFFF End of circular buffer
 
 \section*{Task 2}
 
 \section*{Task 3}
-
+The basic functionality of the control is kept the same as in exercise two, but
+the communication with the other modules had to be adapted to fit the new bus
+model.\\
+\\Control checks its status word for a non-zero value, and if it detects one, it
+will split it into two parts: The address in FastMem for the packet, and the
+identity of the button/adapter from which the packet originated. It will then
+read from FastMem, at the location pointed to in the status word, while also
+acquiring a lock on the SimpleBus, so that subsequent writes are guaranteed not
+to block.\\
+\\If the packet in FastMem appears to be valid, the Control module will see if
+the button that was pressed, is in fact the correct button in the sequence. If
+it was correct, it will advance its internal counter to the next button, and
+write to that button's status word in FastMem; setting it to a non-zero value.
+If it was not the correct button, it will write to all the previously pressed
+buttons' status words, setting them to zero. Non the less it will still obtain
+the lock on the bus.\\
+\\Finally it will set it status word to zero, and release the lock. It then
+sleeps for a short while, before it again checks to see if its status word is
+set to any non-zero value.
 
 \section*{Task 4}
 
