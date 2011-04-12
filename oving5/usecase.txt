@@ -1,0 +1,25 @@
+Name: Search for the right button order (successful)
+Context: Top-level mode (?)
+Pre-conditions: Memory Machine is in initial state, no lights.
+Post-conditions: All lights are lit.
+Start/Trigger: User pushes a button.
+Actors: User, Memory Machine.
+Description:
+    1. User pushes a button.
+    2. If button is correct, button's light is lit.
+     
+    3. ???
+    4. Profit
+
+
+
+Name: Search for the right button order (unsuccessful)
+Context: Top-level mode
+Pre-conditions: Memory Machine is in initial state, no lights.
+Post-conditions: No lights are lit.
+Start/Trigger: User pushes a button.
+Actors/Roles: User, Memory Machine.
+Description:
+    1. 
+    2.
+    3.
