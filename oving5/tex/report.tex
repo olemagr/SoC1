@@ -47,7 +47,14 @@ Description:&
 
   \end{tabular}
 \end{center}
+
 \section{Sequence diagrams}
+The following sequence diagrams outlines the communication between objects.
+In this example, instances of Button classes and an instance of the Controller
+class communicate with each other through the functions push() and light(). The
+first sequence diagram outlines scenario 1, while the second outlines scenario
+2. Both described as use cases in part 1.
+
 \begin{center}
   \includegraphics[width=\linewidth]{../sequence_scenario1}
   \includegraphics[width=\linewidth]{../sequence_scenario2}
@@ -77,5 +84,10 @@ Description:&
 
 
 \section{State Machine Diagrams}
+The state machine shown below contains two concurrent states: One for the reset
+state, and one for when the Memory Machine (the Controller) has received at
+least one correct push, and is waiting for subsequent pushes. The initial state
+takes the state machine to the reset state, without any function call/action
+done. Since there is no defined end state, it has been omitted from the figure.
   \includegraphics[width=\linewidth]{../state_hierarchical}
 \end{document}
