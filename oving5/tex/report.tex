@@ -52,43 +52,82 @@ Description:&
 The following sequence diagrams outlines the communication between objects.
 In this example, instances of Button classes and an instance of the Controller
 class communicate with each other through the functions push() and light(). The
-first sequence diagram outlines scenario 1, while the second outlines scenario
+first sequence diagram(figure \ref{fig:seq1}) outlines scenario 1, 
+while the second(figure \ref{fig:seq2}) outlines scenario
 2. Both described as use cases in part 1.
 
-\begin{center}
+  \begin{figure}
+    \centering
   \includegraphics[width=\linewidth]{../sequence_scenario1}
+    \caption{Sequence diagram, scenario 1}
+    \label{fig:seq1}
+  \end{figure}
+  \begin{figure}[htbp]
+    \centering
   \includegraphics[width=\linewidth]{../sequence_scenario2}
+    \caption{Sequence diagram, scenario 2}
+    \label{fig:seq2}
+  \end{figure}
 
-\end{center}
 \section{Class, objects and collaborations}
-The class diagrams illustrates the structure of the systems, 
-while the inclusion of Collaboration uses and the composite 
-structure diagram defines the roles of the parts and their
-connections.
-\subsection{Class diagram system from exercise 2}
-\includegraphics[width=0.8\linewidth]{../class1}
+The class diagrams(figure \ref{fig:class1} and \ref{fig:classex4}) illustrates the 
+structure of the systems from exercise 2 and 4, respectively.
+The inclusion of Collaboration uses(figure \ref{fig:collabex2} 
+and \ref{fig:collabex4}) and the composite 
+structure diagram(figure \ref{fig:compex2} and \ref{fig:compex4}) 
+defines the roles of the parts and their connections.
+\begin{figure}[htbp]
+  \centering
+\includegraphics[width=\linewidth]{../class1}
+  \caption{Class diagram, system from exercise 2}
+  \label{fig:class1}
+\end{figure}
 
-\subsection{Collaboration}
-
+\begin{figure}[htbp]
+  \centering
   \includegraphics[width=\linewidth]{../class2}
+  \caption{Collaboration use, system from exercise 2}
+  \label{fig:collabex2}
+\end{figure}
 
-\subsection{Compound structure diagram}
-
-  
+\begin{figure}[htbp]
+  \centering
   \includegraphics[width=\linewidth]{../comp1}
-\subsection{Class diagram system from exercise 4}
-  \includegraphics[width=0.8\linewidth]{../class3}
-\subsection{Collaboration}
-  \includegraphics[width=\linewidth]{../class4}
-\subsection{Compound structure diagram}
-  \includegraphics[width=0.9\linewidth]{../comp2}
+  \caption{Composite structure diagram, system from exercise 2}
+  \label{fig:compex2}
+\end{figure}
 
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\linewidth]{../class3}
+  \caption{Class diagram system from exercise 4}
+  \label{fig:classex4}
+\end{figure}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{../class4}
+  \caption{Collaboration use, system from exercise 4}
+  \label{fig:collabex4}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\linewidth]{../comp2}
+  \caption{Composite structure diagram, system from exercise 4}
+  \label{fig:compex4}
+\end{figure}
+  
 
 \section{State Machine Diagrams}
-The state machine shown below contains two concurrent states: One for the reset
+The state machine shown in figure \ref{fig:state} contains two concurrent states: One for the reset
 state, and one for when the Memory Machine (the Controller) has received at
 least one correct push, and is waiting for subsequent pushes. The initial state
 takes the state machine to the reset state, without any function call/action
 done. Since there is no defined end state, it has been omitted from the figure.
+\begin{figure}[htbp]
+  \centering
   \includegraphics[width=\linewidth]{../state_hierarchical}
-\end{document}
+  \caption{State machine for the controller}
+  \label{fig:state}
+\end{figure}
+  \end{document}
